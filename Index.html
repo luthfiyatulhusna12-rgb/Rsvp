@@ -1,0 +1,18 @@
+function doPost(e) {
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Buku Tamu RSVP');
+  const data = JSON.parse(e.postData.contents);
+  sheet.appendRow([data.waktu, data.nama, data.ucapan, data.kehadiran]);
+  return ContentService.createTextOutput('Sukses');
+}
+
+function doGet() {
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Buku Tamu RSVP');
+  const data = sheet.getDataRange().getValues();
+  const headers = data.shift();
+  const jsonData = data.map(row => {
+    let obj = {};
+    headers.forEach((header, i) => obj[header] = row[i]);
+    return obj;
+  });
+  return ContentService.createTextOutput(JSON.stringify(jsonData)).setMimeType(ContentService.MimeType.JSON);
+}
