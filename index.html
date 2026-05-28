@@ -66,15 +66,45 @@
       <div class="counter">🎉 <span id="jumlah-hadir">0</span> Orang Konfirmasi Hadir</div>
 
       <form id="rsvp-form">
-        <input type="text" id="nama" placeholder="Nama Anda" required>
-        <textarea id="ucapan" placeholder="Tulis ucapan & doa..." rows="3" required></textarea>
-        <select id="kehadiran" required>
-          <option value="">Konfirmasi Kehadiran</option>
-          <option value="Hadir">InsyaAllah Hadir</option>
-          <option value="Tidak Hadir">Maaf Tidak Bisa Hadir</option>
-        </select>
-        <button type="submit">Kirim Ucapan</button>
-      </form>
+  <input type="text" name="nama" id="nama" placeholder="Nama Anda" required>
+  <textarea name="ucapan" id="ucapan" placeholder="Tulis ucapan & doa..." rows="3" required></textarea>
+  <select name="kehadiran" id="kehadiran" required>
+    <option value="">Konfirmasi Kehadiran</option>
+    <option value="Hadir">InsyaAllah Hadir</option>
+    <option value="Tidak Hadir">Maaf Tidak Bisa Hadir</option>
+  </select>
+  <button type="submit">Kirim Ucapan</button>
+</form>
+
+<script>
+document.getElementById('rsvp-form').addEventListener('submit', function(e) {
+  e.preventDefault();
+  
+  const url = "https://script.google.com/macros/s/AKfycbyo2396_bd1YK3HbKJeZMdQBpt2Gd54Jbt0z9crU3jnUBzQcoXVBDzsuGPf1SFGbTqdZA/exec";
+  const btn = this.querySelector('button');
+  btn.disabled = true;
+  btn.innerText = 'Mengirim...';
+
+  fetch(url, {
+    method: 'POST',
+    mode: 'no-cors',
+    body: JSON.stringify({
+      nama: document.getElementById('nama').value,
+      ucapan: document.getElementById('ucapan').value,
+      kehadiran: document.getElementById('kehadiran').value
+    })
+  }).then(() => {
+    alert('Terima kasih! Ucapanmu sudah terkirim ❤️');
+    document.getElementById('rsvp-form').reset();
+    btn.disabled = false;
+    btn.innerText = 'Kirim Ucapan';
+  }).catch(err => {
+    alert('Gagal kirim. Coba lagi ya');
+    btn.disabled = false;
+    btn.innerText = 'Kirim Ucapan';
+  });
+});
+</script>
 
       <div id="ucapan-list">
         <h3>Ucapan & Doa:</h3>
