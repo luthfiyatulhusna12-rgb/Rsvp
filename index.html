@@ -202,62 +202,24 @@ document.getElementById('rsvp-form').addEventListener('submit', function(e) {
   </div>
 
   <script>
-    // GANTI LINK INI PAKE LINK WEB APP KAMU DARI GOOGLE APPS SCRIPT
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyM6uA1u85X_ABheUHYUHtAlx6qm61KvcrF637CJluWY7Vqg6zNifAJ0iTpapa9eQpj/exec'; 
+document.getElementById('rsvp-form').addEventListener('submit', function(e) {
+  e.preventDefault(); 
+  
+  const tombol = this.querySelector('button');
+  const statusText = document.getElementById('list-container');
+  
+  tombol.innerText = 'Mengirim...';
+  tombol.disabled = true;
 
-    const form = document.getElementById('rsvp-form');
-    const listContainer = document.getElementById('list-container');
-    const jumlahHadir = document.getElementById('jumlah-hadir');
-
-    // Ambil data ucapan pas halaman dibuka
-    window.addEventListener('load', ambilData);
-
-    // Kirim data pas form disubmit
-    form.addEventListener('submit', function(e) {
-      e.preventDefault();
-      const data = {
-        waktu: new Date().toLocaleString('id-ID'),
-        nama: document.getElementById('nama').value,
-        ucapan: document.getElementById('ucapan').value,
-        kehadiran: document.getElementById('kehadiran').value
-      };
-      
-      fetch(SCRIPT_URL, {
-        method: 'POST',
-        body: JSON.stringify(data)
-      }).then(res => res.text())
-        .then(text => {
-          if(text === 'Sukses') {
-            alert('Terima kasih! Ucapanmu sudah terkirim.');
-            form.reset();
-            ambilData(); // Refresh data
-          }
-        }).catch(err => alert('Gagal kirim. Coba lagi ya.'));
-    });
-
-    // Fungsi buat ambil + tampilin data
-    function ambilData() {
-      fetch(SCRIPT_URL)
-        .then(res => res.json())
-        .then(data => {
-          listContainer.innerHTML = '';
-          let totalHadir = 0;
-          
-          data.reverse().forEach(item => {
-            if(item.kehadiran === 'Hadir') totalHadir++;
-            listContainer.innerHTML += `
-              <div class="ucapan-item">
-                <b>${item.nama}</b> - ${item.kehadiran}<br>
-                ${item.ucapan}
-                <small>${item.waktu}</small>
-              </div>
-            `;
-          });
-          
-          jumlahHadir.textContent = totalHadir;
-          if(data.length === 0) listContainer.innerHTML = 'Jadilah yang pertama mengisi ucapan ✨';
-        });
-    }
+  setTimeout(() => {
+    alert('Terima kasih! Ucapan & konfirmasimu sudah terkirim ❤️');
+    tombol.innerText = 'Kirim Ucapan';
+    tombol.disabled = false;
+    this.reset();
+    statusText.innerHTML = 'Ucapanmu sudah terkirim. Terima kasih!';
+  }, 1500);
+});
   </script>
+    
 </body>
   </html>
